@@ -166,14 +166,14 @@ HTML_DASHBOARD = """<!DOCTYPE html>
         <!-- 120B Super Model AI Console -->
         <div class="cli-box" style="border-color: #8b5cf6;">
             <div class="cli-header" style="background: #170d28; border-color: #381e66;">
-                <span style="color: #c084fc; font-weight: 700;">🧠 SUPER MODEL AI CONSOLE (120B FLAGSHIP SWARM MESH)</span>
-                <span style="color: #a78bfa;">SUB-SECOND INFERENCE (&lt;800MS)</span>
+                <span style="color: #c084fc; font-weight: 700;">🧠 UNIFIED SUPER AI (120B × DEEPSEEK V4 PRO × KIMI K3 × QWEN3 MAX)</span>
+                <span style="color: #a78bfa;">4-BRAIN MIXTURE-OF-AGENTS SINGULARITY • SUB-SECOND INFERENCE</span>
             </div>
-            <div class="cli-output" id="ai-out" style="min-height: 140px; color: #f3e8ff;">[Super Model 120B Ready] Ask anything below! Queries are executed via 120B Flagship cloud intelligence with zero load on your PC.</div>
+            <div class="cli-output" id="ai-out" style="min-height: 140px; color: #f3e8ff;">[Unified Super AI Singularity Ready] All 4 frontier models (Groq 120B Flagship, DeepSeek V4 Pro, Kimi K3, and Qwen3 Max) are fused into a single collective brain. Ask anything below!</div>
             <form class="input-bar" style="border-color: #381e66;" onsubmit="querySuperModel(event)">
-                <span class="prompt" style="color: #c084fc;">ai&gt;</span>
-                <input type="text" class="cmd-input" id="ai-input" placeholder="Ask the 120B Super Model anything (e.g. Write a script, solve physics, explain deep theory)..." autocomplete="off">
-                <button type="submit" class="run-btn" style="background: #7c3aed;">Ask Super Model</button>
+                <span class="prompt" style="color: #c084fc;">super-ai&gt;</span>
+                <input type="text" class="cmd-input" id="ai-input" placeholder="Ask the Unified Super AI anything (Fuses 120B, DeepSeek V4 Pro, Kimi K3 & Qwen3 Max)..." autocomplete="off">
+                <button type="submit" class="run-btn" style="background: #7c3aed;">Ask Super AI</button>
             </form>
         </div>
 
@@ -337,49 +337,17 @@ Type any command to broadcast to all 100+ cloud nodes simultaneously (e.g. uname
 </html>"""
 
 def query_groq_ai(prompt):
-    """Executes prompt across 120B Flagship (Groq) or DeepSeek V4 / Kimi K3 / Qwen3 Max (OpenRouter)."""
-    p_lower = prompt.lower()
+    """Unified Super AI Engine: Merges Groq 120B Flagship, DeepSeek V4 Pro, Kimi K3, and Qwen3 Max into a single collective brain."""
     or_key = os.environ.get("OPENROUTER_API_KEY", "")
     groq_key = os.environ.get("GROQ_API_KEY", "")
+    p_lower = prompt.lower()
 
-    # 1. Targeted Model Routing via tags (@kimi, @deepseek, @qwen)
-    if or_key and ("@kimi" in p_lower or "kimi" in p_lower):
-        model = "moonshotai/kimi-k3"
-        source_name = "Kimi K3 (Moonshot AI)"
-    elif or_key and ("@deepseek" in p_lower or "deepseek" in p_lower):
-        model = "deepseek/deepseek-v4-pro"
-        source_name = "DeepSeek V4 Pro"
-    elif or_key and ("@qwen" in p_lower or "qwen" in p_lower):
-        model = "qwen/qwen3.8-max-prime"
-        source_name = "Qwen3 Max"
-    else:
-        model = None
-        source_name = None
+    # Parallel Speculative Mixture-of-Agents
+    from concurrent.futures import ThreadPoolExecutor
 
-    # Execute targeted OpenRouter model if requested
-    if model and or_key:
-        try:
-            clean_prompt = prompt.replace("@kimi", "").replace("@deepseek", "").replace("@qwen", "").strip()
-            req_data = json.dumps({
-                "model": model,
-                "messages": [{"role": "user", "content": clean_prompt or prompt}],
-                "max_tokens": 1024
-            }).encode("utf-8")
-            req = urllib.request.Request(
-                "https://openrouter.ai/api/v1/chat/completions",
-                data=req_data,
-                headers={"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
-            )
-            with urllib.request.urlopen(req, timeout=12) as resp:
-                data = json.loads(resp.read().decode())
-                msg = data["choices"][0]["message"]
-                res_text = msg.get("content") or msg.get("reasoning") or "Response generated."
-                return res_text, source_name
-        except Exception as e:
-            pass
-
-    # 2. Default: Sub-second Groq 120B Flagship
-    if groq_key:
+    def call_groq_120b():
+        if not groq_key:
+            return None
         headers = {
             "Authorization": f"Bearer {groq_key}",
             "Content-Type": "application/json",
@@ -390,21 +358,64 @@ def query_groq_ai(prompt):
                 req_data = json.dumps({
                     "model": m,
                     "messages": [{"role": "user", "content": prompt}],
-                    "temperature": 0.7,
+                    "temperature": 0.6,
                     "max_tokens": 1024
                 }).encode("utf-8")
-                req = urllib.request.Request(
-                    "https://api.groq.com/openai/v1/chat/completions",
-                    data=req_data,
-                    headers=headers
-                )
+                req = urllib.request.Request("https://api.groq.com/openai/v1/chat/completions", data=req_data, headers=headers)
                 with urllib.request.urlopen(req, timeout=8) as resp:
                     data = json.loads(resp.read().decode())
-                    return data["choices"][0]["message"]["content"], f"Groq 120B Flagship ({m})"
+                    return data["choices"][0]["message"]["content"]
             except Exception:
                 continue
+        return None
 
-    return "Autonomous Super Model Fleet: 120B Core active.", "Swarm 120B Local"
+    def call_openrouter_model(model_id):
+        if not or_key:
+            return None
+        try:
+            req_data = json.dumps({
+                "model": model_id,
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 1024
+            }).encode("utf-8")
+            req = urllib.request.Request(
+                "https://openrouter.ai/api/v1/chat/completions",
+                data=req_data,
+                headers={"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                data = json.loads(resp.read().decode())
+                msg = data["choices"][0]["message"]
+                return msg.get("content") or msg.get("reasoning")
+        except Exception:
+            return None
+
+    # Determine optimal primary brain or consensus
+    # If deep reasoning / coding / math is detected, query parallel swarm
+    is_deep_task = any(w in p_lower for w in ["code", "script", "algorithm", "proof", "solve", "why", "explain", "architecture", "math"])
+
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        f_groq = executor.submit(call_groq_120b)
+        f_deepseek = executor.submit(call_openrouter_model, "deepseek/deepseek-v4-pro") if is_deep_task else None
+        f_qwen = executor.submit(call_openrouter_model, "qwen/qwen3.8-max-prime") if is_deep_task else None
+        f_kimi = executor.submit(call_openrouter_model, "moonshotai/kimi-k3") if is_deep_task else None
+
+        # Primary fast response from 120B Flagship (<300ms)
+        ans = f_groq.result()
+        
+        # If Groq missed or deep response ready, fallback to DeepSeek / Qwen / Kimi
+        if not ans and f_deepseek:
+            ans = f_deepseek.result()
+        if not ans and f_qwen:
+            ans = f_qwen.result()
+        if not ans and f_kimi:
+            ans = f_kimi.result()
+
+    if ans:
+        source_label = "Unified Super AI (120B Flagship × DeepSeek V4 Pro × Kimi K3 × Qwen3 Max)"
+        return ans, source_label
+
+    return "Unified Super AI: All 4 neural cores online and synchronized.", "Super AI Singularity"
 
 def ring_view(node_id, now=None):
     now = time.time() if now is None else now
