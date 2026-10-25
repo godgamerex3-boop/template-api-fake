@@ -481,6 +481,9 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
 
     def send_security_headers(self, content_type="application/json; charset=utf-8"):
         self.send_header("Content-Type", content_type)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Content-Security-Policy", "default-src 'self' 'unsafe-inline' https: data:; frame-ancestors 'none';")
@@ -488,6 +491,11 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
         self.send_header("X-XSS-Protection", "1; mode=block")
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
         self.send_header("Permissions-Policy", "geolocation=(), camera=(), microphone=()")
+
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_security_headers()
+        self.end_headers()
 
     def check_firewall(self, path):
         client_ip = self.headers.get("CF-Connecting-IP") or self.client_address[0]
