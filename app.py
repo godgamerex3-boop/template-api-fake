@@ -337,16 +337,55 @@ Type any command to broadcast to all 100+ cloud nodes simultaneously (e.g. uname
 </html>"""
 
 def query_groq_ai(prompt):
-    """Executes prompt on Groq Cloud 120B Flagship (openai/gpt-oss-120b) in <600ms."""
-    api_key = os.environ.get("GROQ_API_KEY", "")
-    headers = {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-    if api_key:
-        headers["Authorization"] = f"Bearer {api_key}"
-        models = ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"]
-        for m in models:
+    """Executes prompt across 120B Flagship (Groq) or DeepSeek V4 / Kimi K3 / Qwen3 Max (OpenRouter)."""
+    p_lower = prompt.lower()
+    or_key = os.environ.get("OPENROUTER_API_KEY", "")
+    groq_key = os.environ.get("GROQ_API_KEY", "")
+
+    # 1. Targeted Model Routing via tags (@kimi, @deepseek, @qwen)
+    if or_key and ("@kimi" in p_lower or "kimi" in p_lower):
+        model = "moonshotai/kimi-k3"
+        source_name = "Kimi K3 (Moonshot AI)"
+    elif or_key and ("@deepseek" in p_lower or "deepseek" in p_lower):
+        model = "deepseek/deepseek-v4-pro"
+        source_name = "DeepSeek V4 Pro"
+    elif or_key and ("@qwen" in p_lower or "qwen" in p_lower):
+        model = "qwen/qwen3.8-max-prime"
+        source_name = "Qwen3 Max"
+    else:
+        model = None
+        source_name = None
+
+    # Execute targeted OpenRouter model if requested
+    if model and or_key:
+        try:
+            clean_prompt = prompt.replace("@kimi", "").replace("@deepseek", "").replace("@qwen", "").strip()
+            req_data = json.dumps({
+                "model": model,
+                "messages": [{"role": "user", "content": clean_prompt or prompt}],
+                "max_tokens": 1024
+            }).encode("utf-8")
+            req = urllib.request.Request(
+                "https://openrouter.ai/api/v1/chat/completions",
+                data=req_data,
+                headers={"Authorization": f"Bearer {or_key}", "Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                data = json.loads(resp.read().decode())
+                msg = data["choices"][0]["message"]
+                res_text = msg.get("content") or msg.get("reasoning") or "Response generated."
+                return res_text, source_name
+        except Exception as e:
+            pass
+
+    # 2. Default: Sub-second Groq 120B Flagship
+    if groq_key:
+        headers = {
+            "Authorization": f"Bearer {groq_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        for m in ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"]:
             try:
                 req_data = json.dumps({
                     "model": m,
@@ -359,7 +398,7 @@ def query_groq_ai(prompt):
                     data=req_data,
                     headers=headers
                 )
-                with urllib.request.urlopen(req, timeout=10) as resp:
+                with urllib.request.urlopen(req, timeout=8) as resp:
                     data = json.loads(resp.read().decode())
                     return data["choices"][0]["message"]["content"], f"Groq 120B Flagship ({m})"
             except Exception:
