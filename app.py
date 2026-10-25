@@ -674,6 +674,53 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps({"response": ans, "duration": dur, "source": src}).encode("utf-8"))
 
+        elif path == "/v1/chat/completions":
+            # Universal OpenAI-compatible chat completions endpoint
+            messages = data.get("messages", [])
+            prompt_parts = []
+            for m in messages:
+                role = m.get("role", "user")
+                content = m.get("content", "")
+                if role == "system":
+                    prompt_parts.append(f"[System Instructions]:\n{content}")
+                elif role == "user":
+                    prompt_parts.append(f"[User]:\n{content}")
+                elif role == "assistant":
+                    prompt_parts.append(f"[Assistant]:\n{content}")
+            prompt = "\n\n".join(prompt_parts) if prompt_parts else str(data.get("prompt", ""))
+
+            t0 = time.time()
+            ans, src = query_groq_ai(prompt)
+            dur = round(time.time() - t0, 3)
+
+            openai_res = {
+                "id": f"chatcmpl-{uuid.uuid4().hex[:12]}",
+                "object": "chat.completion",
+                "created": int(time.time()),
+                "model": data.get("model", "super-ai-120b"),
+                "choices": [{
+                    "index": 0,
+                    "message": {
+                        "role": "assistant",
+                        "content": ans
+                    },
+                    "finish_reason": "stop"
+                }],
+                "usage": {
+                    "prompt_tokens": len(prompt.split()),
+                    "completion_tokens": len(ans.split()),
+                    "total_tokens": len(prompt.split()) + len(ans.split())
+                },
+                "meta": {
+                    "duration_sec": dur,
+                    "source": src
+                }
+            }
+            self.send_response(200)
+            self.send_security_headers()
+            self.end_headers()
+            self.wfile.write(json.dumps(openai_res).encode("utf-8"))
+
         elif path == "/api/cluster/sync":
             # Receives aggregated snapshot from local sync daemon
             with nodes_lock:
