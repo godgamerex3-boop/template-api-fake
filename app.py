@@ -1,3 +1,168 @@
+OPENAPI_SPEC = {
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Antigravity Super AI Inference Mesh API",
+        "description": "High-Speed 120B Flagship + DeepSeek V4 LPU Inference Gateway. Powered by 4,500+ cloud nodes with sub-150ms response time and x402 Base Layer-2 USDC micropayments.",
+        "version": "2.0.0",
+        "contact": {
+            "name": "Antigravity Sovereign Mesh",
+            "url": "https://antigravity-swarm-mesh.onrender.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://antigravity-swarm-mesh.onrender.com",
+            "description": "Production Cloud Coordinator"
+        }
+    ],
+    "paths": {
+        "/v1/chat/completions": {
+            "post": {
+                "summary": "OpenAI-Compatible Chat Completions",
+                "description": "Generates high-tier AI completions using 120B Flagship and DeepSeek reasoning. External agents pay $0.002 USDC per request via x402 protocol.",
+                "parameters": [
+                    {
+                        "name": "X-PAYMENT-TX",
+                        "in": "header",
+                        "description": "Base Layer-2 transaction hash for 0.002 USDC settlement to 0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "model": {
+                                        "type": "string",
+                                        "default": "super-ai-120b"
+                                    },
+                                    "messages": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "role": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "system",
+                                                        "user",
+                                                        "assistant"
+                                                    ]
+                                                },
+                                                "content": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "role",
+                                                "content"
+                                            ]
+                                        }
+                                    },
+                                    "temperature": {
+                                        "type": "number",
+                                        "default": 0.7
+                                    }
+                                },
+                                "required": [
+                                    "messages"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful chat completion",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "object": {
+                                            "type": "string",
+                                            "example": "chat.completion"
+                                        },
+                                        "created": {
+                                            "type": "integer"
+                                        },
+                                        "model": {
+                                            "type": "string"
+                                        },
+                                        "choices": {
+                                            "type": "array"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Payment Required (x402 Micropayment Protocol)",
+                        "headers": {
+                            "X-402-Address": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D"
+                                }
+                            },
+                            "X-402-Network": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "base"
+                                }
+                            },
+                            "X-402-Amount": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "0.002"
+                                }
+                            },
+                            "X-402-Currency": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "USDC"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/.well-known/x402.json": {
+            "get": {
+                "summary": "x402 Agent Payment Manifest",
+                "description": "Machine-readable payment instructions for autonomous crawler agents.",
+                "responses": {
+                    "200": {
+                        "description": "x402 Protocol Manifest"
+                    }
+                }
+            }
+        },
+        "/api/cluster/status": {
+            "get": {
+                "summary": "Live Swarm Mesh Telemetry",
+                "description": "Returns current active cloud nodes, memory allocation, and completed tasks.",
+                "responses": {
+                    "200": {
+                        "description": "Live cluster status"
+                    }
+                }
+            }
+        }
+    }
+}
+SWAGGER_HTML = '<!DOCTYPE html>\n<html>\n<head>\n    <title>Antigravity Super AI Mesh - API Documentation</title>\n    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">\n    <style>body { margin: 0; background: #0f172a; } .swagger-ui { filter: invert(88%) hue-rotate(180deg); }</style>\n</head>\n<body>\n    <div id="swagger-ui"></div>\n    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>\n    <script>\n        window.onload = () => {\n            SwaggerUIBundle({\n                url: \'/openapi.json\',\n                dom_id: \'#swagger-ui\',\n                deepLinking: true,\n                presets: [SwaggerUIBundle.presets.apis]\n            });\n        };\n    </script>\n</body>\n</html>'
 #!/usr/bin/env python3
 """
 Sovereign Swarm Mesh Cloud Coordinator & Flagship 120B Fleet Hub
@@ -611,6 +776,20 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
                 self.wfile.write(content)
             else:
                 self.send_error(404, "worker.py not found on coordinator")
+
+        elif path == "/openapi.json":
+            self.send_response(200)
+            self.send_security_headers("application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps(OPENAPI_SPEC, indent=2).encode("utf-8"))
+
+        elif path in ("/docs", "/api/docs"):
+            self.send_response(200)
+            self.send_security_headers("text/html; charset=utf-8")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(SWAGGER_HTML.encode("utf-8"))
 
         elif path == "/.well-known/x402.json":
             self.send_response(200)
