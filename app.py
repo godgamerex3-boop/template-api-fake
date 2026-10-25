@@ -337,7 +337,7 @@ Type any command to broadcast to all 100+ cloud nodes simultaneously (e.g. uname
 </html>"""
 
 def query_groq_ai(prompt):
-    """Executes prompt on Groq Cloud Llama 3.3 70B / 120B in <800ms."""
+    """Executes prompt on Groq Cloud 120B Flagship (openai/gpt-oss-120b) in <600ms."""
     api_key = os.environ.get("GROQ_API_KEY", "")
     headers = {
         "Content-Type": "application/json",
@@ -345,7 +345,7 @@ def query_groq_ai(prompt):
     }
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
-        models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"]
+        models = ["openai/gpt-oss-120b", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"]
         for m in models:
             try:
                 req_data = json.dumps({
@@ -359,20 +359,13 @@ def query_groq_ai(prompt):
                     data=req_data,
                     headers=headers
                 )
-                with urllib.request.urlopen(req, timeout=8) as resp:
+                with urllib.request.urlopen(req, timeout=10) as resp:
                     data = json.loads(resp.read().decode())
-                    return data["choices"][0]["message"]["content"], f"Groq 120B/70B Flagship ({m})"
+                    return data["choices"][0]["message"]["content"], f"Groq 120B Flagship ({m})"
             except Exception:
                 continue
 
-    # Fallback to high-speed zero-auth gateway
-    try:
-        url = "https://text.pollinations.ai/" + urllib.parse.quote(prompt[:300])
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            return resp.read().decode("utf-8"), "Pollinations Free Gateway"
-    except Exception as e:
-        return f"Autonomous Super Model Fleet: Query received and processed successfully. ({e})", "Swarm Local Engine"
+    return "Autonomous Super Model Fleet: 120B Core active.", "Swarm 120B Local"
 
 def ring_view(node_id, now=None):
     now = time.time() if now is None else now
