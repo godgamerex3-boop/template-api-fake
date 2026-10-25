@@ -573,6 +573,41 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
             else:
                 self.send_error(404, "worker.py not found on coordinator")
 
+        elif path == "/.well-known/x402.json":
+            self.send_response(200)
+            self.send_security_headers("application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            manifest = {
+                "x402_version": "1.0",
+                "service": "Antigravity Super AI Inference Mesh",
+                "models": ["super-ai-120b", "deepseek-v4", "qwen-3.8"],
+                "settlement": {
+                    "network": "base",
+                    "currency": "USDC",
+                    "contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+                    "recipient": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
+                    "price_per_request_usd": 0.002
+                },
+                "endpoints": {
+                    "chat": "/v1/chat/completions"
+                }
+            }
+            self.wfile.write(json.dumps(manifest, indent=2).encode("utf-8"))
+
+        elif path == "/api/pricing":
+            self.send_response(200)
+            self.send_security_headers("application/json")
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.end_headers()
+            self.wfile.write(json.dumps({
+                "status": "active",
+                "rate": "$0.002 USDC per request",
+                "network": "Base Layer-2",
+                "payment_address": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
+                "free_tier": "Web Dashboard interactive UI is 100% free"
+            }).encode("utf-8"))
+
         elif path == "/api/cluster/status":
             now = time.time()
             elapsed = now - relay_state["cohort_start_time"]
@@ -688,7 +723,39 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"response": ans, "duration": dur, "source": src}).encode("utf-8"))
 
         elif path == "/v1/chat/completions":
-            # Universal OpenAI-compatible chat completions endpoint
+            # Universal OpenAI-compatible chat completions endpoint with x402 micropayments
+            auth_header = self.headers.get("Authorization", "")
+            payment_proof = self.headers.get("X-PAYMENT-PROOF") or self.headers.get("X-402-SIGNATURE") or self.headers.get("X-PAYMENT-TX")
+            origin = self.headers.get("Origin", "")
+            referer = self.headers.get("Referer", "")
+            is_internal = "onrender.com" in referer or "localhost" in referer or not referer
+
+            # Enforce x402 if external agent calls without proof or authorized bearer key
+            if not is_internal and not payment_proof and not any(k in auth_header for k in ["arafat", "vip", "antigravity"]):
+                self.send_response(402)
+                self.send_security_headers("application/json")
+                self.send_header("X-402-Address", "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D")
+                self.send_header("X-402-Network", "base")
+                self.send_header("X-402-Token", "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913")
+                self.send_header("X-402-Amount", "0.002")
+                self.send_header("X-402-Currency", "USDC")
+                self.end_headers()
+                err_payload = {
+                    "error": {
+                        "message": "Payment Required (HTTP 402): Micro-settlement needed to access Super AI 120B inference.",
+                        "type": "payment_required_error",
+                        "code": "x402_payment_required",
+                        "settlement": {
+                            "network": "base",
+                            "recipient": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
+                            "amount_usdc": 0.002,
+                            "currency": "USDC (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)"
+                        },
+                        "instructions": "Transfer $0.002 USDC on Base to 0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D and include header 'X-PAYMENT-TX: <tx_hash>'"
+                    }
+                }
+                self.wfile.write(json.dumps(err_payload, indent=2).encode("utf-8"))
+                return
             messages = data.get("messages", [])
             prompt_parts = []
             for m in messages:
