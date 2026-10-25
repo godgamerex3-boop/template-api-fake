@@ -336,6 +336,19 @@ Type any command to broadcast to all 100+ cloud nodes simultaneously (e.g. uname
 </body>
 </html>"""
 
+def sanitize_model_output(text):
+    if not text:
+        return ""
+    if "<tool_call>" in text or "</tool_call>" in text or "<function=" in text or "</function>" in text:
+        # Strip out raw XML tool calling tags from model output
+        cleaned = re.sub(r'<tool_call>.*?</tool_call>', '', text, flags=re.DOTALL)
+        cleaned = re.sub(r'</?(?:function|parameter)[^>]*>', '', cleaned)
+        cleaned = re.sub(r'</?[a-zA-Z0-9_=-]+>', '', cleaned).strip()
+        if not cleaned:
+            return "I don't have direct access to your local filesystem from this cloud web interface, but you can paste the file or code here and I will analyze it instantly!"
+        return cleaned
+    return text
+
 def query_groq_ai(prompt):
     """Ultra-Fast Super AI Engine: Dual-Hedged Speculative Race across 3 Groq LPU Keys (126ms) + Tier-1 DeepSeek/Qwen Fallback."""
     from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -360,7 +373,7 @@ def query_groq_ai(prompt):
         req = urllib.request.Request("https://api.groq.com/openai/v1/chat/completions", data=payload, headers=headers)
         with urllib.request.urlopen(req, timeout=6) as resp:
             data = json.loads(resp.read().decode())
-            return data["choices"][0]["message"]["content"], f"Ultra-Fast Super AI ({model_name})"
+            return sanitize_model_output(data["choices"][0]["message"]["content"]), f"Ultra-Fast Super AI ({model_name})"
 
     # Ultra-Fast Speculative Race: Launch Qwen 3.8 (126ms) and 120B (350ms) simultaneously across keys
     primary_key = groq_keys[0] if groq_keys else ""
