@@ -1,0 +1,2 @@
+# Clean Slate System Prompt Canvas
+# Define your new custom persona, rules, and technical directives here.
