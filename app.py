@@ -1,11 +1,11 @@
 OPENAPI_SPEC = {
     "openapi": "3.1.0",
     "info": {
-        "title": "Antigravity Super AI Inference Mesh API",
+        "title": "AR International Super AI Inference Mesh API",
         "description": "High-Speed 120B Flagship + DeepSeek V4 LPU Inference Gateway. Powered by 4,500+ cloud nodes with sub-150ms response time and x402 Base Layer-2 USDC micropayments.",
         "version": "2.0.0",
         "contact": {
-            "name": "Antigravity Sovereign Mesh",
+            "name": "AR International Sovereign Mesh",
             "url": "https://antigravity-swarm-mesh.onrender.com"
         }
     },
@@ -162,7 +162,7 @@ OPENAPI_SPEC = {
         }
     }
 }
-SWAGGER_HTML = '<!DOCTYPE html>\n<html>\n<head>\n    <title>Antigravity Super AI Mesh - API Documentation</title>\n    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">\n    <style>body { margin: 0; background: #0f172a; } .swagger-ui { filter: invert(88%) hue-rotate(180deg); }</style>\n</head>\n<body>\n    <div id="swagger-ui"></div>\n    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>\n    <script>\n        window.onload = () => {\n            SwaggerUIBundle({\n                url: \'/openapi.json\',\n                dom_id: \'#swagger-ui\',\n                deepLinking: true,\n                presets: [SwaggerUIBundle.presets.apis]\n            });\n        };\n    </script>\n</body>\n</html>'
+SWAGGER_HTML = '<!DOCTYPE html>\n<html>\n<head>\n    <title>AR International Super AI Mesh - API Documentation</title>\n    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">\n    <style>body { margin: 0; background: #0f172a; } .swagger-ui { filter: invert(88%) hue-rotate(180deg); }</style>\n</head>\n<body>\n    <div id="swagger-ui"></div>\n    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>\n    <script>\n        window.onload = () => {\n            SwaggerUIBundle({\n                url: \'/openapi.json\',\n                dom_id: \'#swagger-ui\',\n                deepLinking: true,\n                presets: [SwaggerUIBundle.presets.apis]\n            });\n        };\n    </script>\n</body>\n</html>'
 #!/usr/bin/env python3
 """
 Sovereign Swarm Mesh Cloud Coordinator & Flagship 120B Fleet Hub
@@ -250,7 +250,7 @@ HTML_DASHBOARD = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Antigravity Swarm Mesh — 100+ Cloud Nodes</title>
+    <title>AR International Swarm Mesh — 100+ Cloud Nodes</title>
     <style>
         :root {
             --bg: #07090e;
@@ -296,7 +296,7 @@ HTML_DASHBOARD = """<!DOCTYPE html>
     <div class="container">
         <div class="header">
             <div>
-                <div class="logo-title">⚡ Antigravity Swarm Mesh</div>
+                <div class="logo-title">⚡ AR International Swarm Mesh</div>
                 <p style="color: var(--text-dim); font-size: 13px; margin-top: 4px;">100+ Active Cloud Nodes • 100% External Free Datacenters • Zero Local PC Compute</p>
             </div>
             <div style="display: flex; gap: 10px; align-items: center;">
@@ -349,7 +349,7 @@ HTML_DASHBOARD = """<!DOCTYPE html>
                 <span>⚡ SWARM COMMAND BROADCASTER (DISPATCHES TO ALL 100+ NODES AT ONCE)</span>
                 <span style="color: #10b981;">100-NODE PARALLEL DISPATCH</span>
             </div>
-            <div class="cli-output" id="swarm-out">[Antigravity Swarm Mesh Initialized]
+            <div class="cli-output" id="swarm-out">[AR International Swarm Mesh Initialized]
 Type any command to broadcast to all 100+ cloud nodes simultaneously (e.g. uname -a, uptime, free -h, python3 --version).</div>
             <form class="input-bar" onsubmit="broadcastCommand(event)">
                 <span class="prompt">swarm&gt;</span>
@@ -690,7 +690,7 @@ def independent_cloud_reconciliation_scheduler():
         time.sleep(15)
 
 class FortifiedSwarmHandler(BaseHTTPRequestHandler):
-    server_version = "Antigravity-Fortress/2.4"
+    server_version = "AR-International-Fortress/2.4"
     sys_version = ""
 
     def log_message(self, format, *args):
