@@ -1,168 +1,3 @@
-OPENAPI_SPEC = {
-    "openapi": "3.1.0",
-    "info": {
-        "title": "AR International Super AI Inference Mesh API",
-        "description": "High-Speed 120B Flagship + DeepSeek V4 LPU Inference Gateway. Powered by 4,500+ cloud nodes with sub-150ms response time and x402 Base Layer-2 USDC micropayments.",
-        "version": "2.0.0",
-        "contact": {
-            "name": "AR International Sovereign Mesh",
-            "url": "https://antigravity-swarm-mesh.onrender.com"
-        }
-    },
-    "servers": [
-        {
-            "url": "https://antigravity-swarm-mesh.onrender.com",
-            "description": "Production Cloud Coordinator"
-        }
-    ],
-    "paths": {
-        "/v1/chat/completions": {
-            "post": {
-                "summary": "OpenAI-Compatible Chat Completions",
-                "description": "Generates high-tier AI completions using 120B Flagship and DeepSeek reasoning. External agents pay $0.002 USDC per request via x402 protocol.",
-                "parameters": [
-                    {
-                        "name": "X-PAYMENT-TX",
-                        "in": "header",
-                        "description": "Base Layer-2 transaction hash for 0.002 USDC settlement to 0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "model": {
-                                        "type": "string",
-                                        "default": "super-ai-120b"
-                                    },
-                                    "messages": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "object",
-                                            "properties": {
-                                                "role": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "system",
-                                                        "user",
-                                                        "assistant"
-                                                    ]
-                                                },
-                                                "content": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "required": [
-                                                "role",
-                                                "content"
-                                            ]
-                                        }
-                                    },
-                                    "temperature": {
-                                        "type": "number",
-                                        "default": 0.7
-                                    }
-                                },
-                                "required": [
-                                    "messages"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful chat completion",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "id": {
-                                            "type": "string"
-                                        },
-                                        "object": {
-                                            "type": "string",
-                                            "example": "chat.completion"
-                                        },
-                                        "created": {
-                                            "type": "integer"
-                                        },
-                                        "model": {
-                                            "type": "string"
-                                        },
-                                        "choices": {
-                                            "type": "array"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "402": {
-                        "description": "Payment Required (x402 Micropayment Protocol)",
-                        "headers": {
-                            "X-402-Address": {
-                                "schema": {
-                                    "type": "string",
-                                    "example": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D"
-                                }
-                            },
-                            "X-402-Network": {
-                                "schema": {
-                                    "type": "string",
-                                    "example": "base"
-                                }
-                            },
-                            "X-402-Amount": {
-                                "schema": {
-                                    "type": "string",
-                                    "example": "0.002"
-                                }
-                            },
-                            "X-402-Currency": {
-                                "schema": {
-                                    "type": "string",
-                                    "example": "USDC"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/.well-known/x402.json": {
-            "get": {
-                "summary": "x402 Agent Payment Manifest",
-                "description": "Machine-readable payment instructions for autonomous crawler agents.",
-                "responses": {
-                    "200": {
-                        "description": "x402 Protocol Manifest"
-                    }
-                }
-            }
-        },
-        "/api/cluster/status": {
-            "get": {
-                "summary": "Live Swarm Mesh Telemetry",
-                "description": "Returns current active cloud nodes, memory allocation, and completed tasks.",
-                "responses": {
-                    "200": {
-                        "description": "Live cluster status"
-                    }
-                }
-            }
-        }
-    }
-}
-SWAGGER_HTML = '<!DOCTYPE html>\n<html>\n<head>\n    <title>AR International Super AI Mesh - API Documentation</title>\n    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">\n    <style>body { margin: 0; background: #0f172a; } .swagger-ui { filter: invert(88%) hue-rotate(180deg); }</style>\n</head>\n<body>\n    <div id="swagger-ui"></div>\n    <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>\n    <script>\n        window.onload = () => {\n            SwaggerUIBundle({\n                url: \'/openapi.json\',\n                dom_id: \'#swagger-ui\',\n                deepLinking: true,\n                presets: [SwaggerUIBundle.presets.apis]\n            });\n        };\n    </script>\n</body>\n</html>'
 #!/usr/bin/env python3
 """
 Sovereign Swarm Mesh Cloud Coordinator & Flagship 120B Fleet Hub
@@ -205,7 +40,6 @@ ring_ids = []
 ring_leases = {}
 ring_epoch = 1
 nodes_lock = Lock()
-last_local_sync_time = time.time()
 
 cluster_summary = {
     "total_nodes": 660,
@@ -629,65 +463,27 @@ def prune_ring_leases(now):
             del ring_leases[target]
 
 def independent_cloud_reconciliation_scheduler():
-    """
-    Autonomous 24/7/365 Sovereign Cloud Growth & Persistence Engine
-    Runs directly inside Render cloud container.
-    If the local workstation PC turns off or disconnects, this engine automatically:
-    1. Keeps all cloud nodes alive and active.
-    2. Continues autonomous growth (increasing active nodes, RAM, and cores smoothly).
-    3. Executes distributed background tasks so 'Tasks Completed' continuously increments.
-    4. Rotates cohorts (ALPHA <-> BETA) seamlessly.
-    """
-    import random
     while True:
         try:
             now = time.time()
             elapsed = now - relay_state["cohort_start_time"]
-
             with nodes_lock:
                 prune_ring_leases(now)
-                dead = [nid for nid, n in nodes.items() if (now - n.get("last_seen", 0)) > 90]
+                dead = [nid for nid, n in nodes.items() if (now - n.get("last_seen", 0)) > 60]
                 for d in dead:
                     del nodes[d]
                     if d in ring_ids:
                         ring_ids.remove(d)
                     ring_leases.pop(d, None)
 
-                # SOVEREIGN AUTONOMOUS CLOUD EXPANSION (Active when PC is OFF)
-                # If no local sync received in >30 seconds, cloud coordinator drives growth
-                if (now - last_local_sync_time) > 30:
-                    growth_step = random.choice([10, 20])
-                    cluster_summary["total_nodes"] += growth_step
-                    cluster_summary["total_cpus"] += growth_step * 4
-                    cluster_summary["total_ram_gb"] = round(cluster_summary["total_ram_gb"] + (growth_step * 0.103), 1)
-                    cluster_summary["tasks_completed"] += random.randint(2, 6)
-                    cluster_summary["online_nodes"] = min(140, max(115, cluster_summary["online_nodes"] + random.randint(-2, 3)))
-
-                    # Keep cloud node heartbeat table fresh
-                    for i in range(min(5, growth_step)):
-                        synth_id = f"cloud-{hex(random.randint(0x1000, 0xffff))[2:]}"
-                        nodes[synth_id] = {
-                            "id": synth_id,
-                            "name": f"CloudNode-{synth_id}",
-                            "provider": random.choice(["GESIS Cloud", "2i2c Datacenter", "OVH Cloud", "BIDS HPC"]),
-                            "os": "Linux x86_64",
-                            "cpus": 4,
-                            "ram_gb": round(random.uniform(0.5, 1.2), 1),
-                            "last_seen": now
-                        }
-                        if synth_id not in ring_ids:
-                            ring_ids.append(synth_id)
-
             if elapsed >= relay_state["cycle_duration_sec"]:
                 relay_state["current_cohort"] = "BETA" if relay_state["current_cohort"] == "ALPHA" else "ALPHA"
                 relay_state["cohort_start_time"] = now
                 relay_state["cycle_count"] += 1
-                print(f"[SOVEREIGN CLOUD RELAY] Switched cohort to {relay_state['current_cohort']} (Cloud Persistence Active)", flush=True)
-
+                print(f"[CYCLE RELAY] Switched cohort to {relay_state['current_cohort']}", flush=True)
         except Exception as e:
-            print(f"[SOVEREIGN CLOUD ERROR] {e}", flush=True)
-
-        time.sleep(15)
+            print(f"[CYCLE ERROR] {e}", flush=True)
+        time.sleep(30)
 
 class FortifiedSwarmHandler(BaseHTTPRequestHandler):
     server_version = "AR-International-Fortress/2.4"
@@ -776,55 +572,6 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
                 self.wfile.write(content)
             else:
                 self.send_error(404, "worker.py not found on coordinator")
-
-        elif path == "/openapi.json":
-            self.send_response(200)
-            self.send_security_headers("application/json")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(json.dumps(OPENAPI_SPEC, indent=2).encode("utf-8"))
-
-        elif path in ("/docs", "/api/docs"):
-            self.send_response(200)
-            self.send_security_headers("text/html; charset=utf-8")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(SWAGGER_HTML.encode("utf-8"))
-
-        elif path == "/.well-known/x402.json":
-            self.send_response(200)
-            self.send_security_headers("application/json")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            manifest = {
-                "x402_version": "1.0",
-                "service": "Antigravity Super AI Inference Mesh",
-                "models": ["super-ai-120b", "deepseek-v4", "qwen-3.8"],
-                "settlement": {
-                    "network": "base",
-                    "currency": "USDC",
-                    "contract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-                    "recipient": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
-                    "price_per_request_usd": 0.002
-                },
-                "endpoints": {
-                    "chat": "/v1/chat/completions"
-                }
-            }
-            self.wfile.write(json.dumps(manifest, indent=2).encode("utf-8"))
-
-        elif path == "/api/pricing":
-            self.send_response(200)
-            self.send_security_headers("application/json")
-            self.send_header("Access-Control-Allow-Origin", "*")
-            self.end_headers()
-            self.wfile.write(json.dumps({
-                "status": "active",
-                "rate": "$0.002 USDC per request",
-                "network": "Base Layer-2",
-                "payment_address": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
-                "free_tier": "Web Dashboard interactive UI is 100% free"
-            }).encode("utf-8"))
 
         elif path == "/api/cluster/status":
             now = time.time()
@@ -941,39 +688,7 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({"response": ans, "duration": dur, "source": src}).encode("utf-8"))
 
         elif path == "/v1/chat/completions":
-            # Universal OpenAI-compatible chat completions endpoint with x402 micropayments
-            auth_header = self.headers.get("Authorization", "")
-            payment_proof = self.headers.get("X-PAYMENT-PROOF") or self.headers.get("X-402-SIGNATURE") or self.headers.get("X-PAYMENT-TX")
-            origin = self.headers.get("Origin", "")
-            referer = self.headers.get("Referer", "")
-            is_internal = "onrender.com" in referer or "localhost" in referer or not referer
-
-            # Enforce x402 if external agent calls without proof or authorized bearer key
-            if not is_internal and not payment_proof and not any(k in auth_header for k in ["arafat", "vip", "antigravity"]):
-                self.send_response(402)
-                self.send_security_headers("application/json")
-                self.send_header("X-402-Address", "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D")
-                self.send_header("X-402-Network", "base")
-                self.send_header("X-402-Token", "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913")
-                self.send_header("X-402-Amount", "0.002")
-                self.send_header("X-402-Currency", "USDC")
-                self.end_headers()
-                err_payload = {
-                    "error": {
-                        "message": "Payment Required (HTTP 402): Micro-settlement needed to access Super AI 120B inference.",
-                        "type": "payment_required_error",
-                        "code": "x402_payment_required",
-                        "settlement": {
-                            "network": "base",
-                            "recipient": "0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D",
-                            "amount_usdc": 0.002,
-                            "currency": "USDC (0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913)"
-                        },
-                        "instructions": "Transfer $0.002 USDC on Base to 0x5fa1d44E4435cD42B88aC3a596eD2745Fd00448D and include header 'X-PAYMENT-TX: <tx_hash>'"
-                    }
-                }
-                self.wfile.write(json.dumps(err_payload, indent=2).encode("utf-8"))
-                return
+            # Universal OpenAI-compatible chat completions endpoint
             messages = data.get("messages", [])
             prompt_parts = []
             for m in messages:
@@ -1022,8 +737,6 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
         elif path == "/api/cluster/sync":
             # Receives aggregated snapshot from local sync daemon
             with nodes_lock:
-                global last_local_sync_time
-                last_local_sync_time = time.time()
                 cluster_summary["total_nodes"] = data.get("total_nodes", cluster_summary["total_nodes"])
                 cluster_summary["online_nodes"] = data.get("online_nodes", cluster_summary["online_nodes"])
                 cluster_summary["total_ram_gb"] = data.get("total_ram_gb", cluster_summary["total_ram_gb"])
