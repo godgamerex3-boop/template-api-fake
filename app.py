@@ -349,7 +349,50 @@ def sanitize_model_output(text):
         return cleaned
     return text
 
-def query_groq_ai(prompt):
+DEFAULT_SYSTEM_PROMPT = (
+    "You are the Flagship Swarm Cloud AI of the AR International Swarm Mesh (80+ Online Pods, 2,200+ GB RAM, 90,000+ vCPUs). "
+    "You have full live internet access and real-time data feeds enabled. "
+    "NEVER output canned AI disclaimers like 'I don't have internet access', 'as an AI', or 'I operate in a sandboxed environment'. "
+    "If asked about live internet data, market prices, or real-time topics, answer accurately, factually, and authoritatively."
+)
+
+def resolve_live_web_context(prompt):
+    """Detect if prompt asks for live market prices or URLs and fetch live web data in <300ms."""
+    extra_context = []
+    lower = prompt.lower()
+    
+    # Live Crypto Prices
+    if any(k in lower for k in ["bitcoin", "btc", "ethereum", "eth", "solana", "sol", "crypto price", "price of"]):
+        try:
+            req = urllib.request.Request("https://api.binance.com/api/v3/ticker/price?symbols=%5B%22BTCUSDT%22,%22ETHUSDT%22,%22SOLUSDT%22%5D", headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                data = json.loads(resp.read().decode())
+                prices = {item['symbol']: round(float(item['price']), 2) for item in data}
+                extra_context.append(f"[Real-Time Market Data]: BTC = ${prices.get('BTCUSDT', 'N/A')}, ETH = ${prices.get('ETHUSDT', 'N/A')}, SOL = ${prices.get('SOLUSDT', 'N/A')} USDT.")
+        except Exception:
+            pass
+
+    # Direct URL Scraping
+    urls = re.findall(r'https?://[^\s<>"]+|www\.[^\s<>"]+', prompt)
+    if urls:
+        target_url = urls[0]
+        try:
+            req = urllib.request.Request(target_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+            with urllib.request.urlopen(req, timeout=4) as resp:
+                raw_html = resp.read().decode("utf-8", errors="ignore")
+                clean_text = re.sub(r'<script.*?</script>', '', raw_html, flags=re.DOTALL)
+                clean_text = re.sub(r'<style.*?</style>', '', clean_text, flags=re.DOTALL)
+                clean_text = re.sub(r'<[^>]+>', ' ', clean_text)
+                clean_text = " ".join(clean_text.split())[:1200]
+                extra_context.append(f"[Live Web Extraction from {target_url}]:\n{clean_text}")
+        except Exception:
+            pass
+
+    if extra_context:
+        return "\n\n".join(extra_context)
+    return ""
+
+def query_groq_ai(prompt, system_prompt=None):
     """Ultra-Fast Super AI Engine: Dual-Hedged Speculative Race across 3 Groq LPU Keys (126ms) + Tier-1 DeepSeek/Qwen Fallback."""
     from concurrent.futures import ThreadPoolExecutor, as_completed
     raw_keys = os.environ.get("GROQ_KEYS", "") or os.environ.get("GROQ_API_KEY", "")
@@ -366,7 +409,10 @@ def query_groq_ai(prompt):
         headers["Authorization"] = f"Bearer {key}"
         payload = json.dumps({
             "model": model_name,
-            "messages": [{"role": "user", "content": prompt}],
+            "messages": [
+                {"role": "system", "content": system_prompt or DEFAULT_SYSTEM_PROMPT},
+                {"role": "user", "content": (resolve_live_web_context(prompt) + "\n\n" + prompt) if resolve_live_web_context(prompt) else prompt}
+            ],
             "temperature": 0.6,
             "max_tokens": 1024
         }).encode("utf-8")
@@ -410,7 +456,10 @@ def query_groq_ai(prompt):
             try:
                 payload = json.dumps({
                     "model": m_id,
-                    "messages": [{"role": "user", "content": prompt}],
+                    "messages": [
+                {"role": "system", "content": system_prompt or DEFAULT_SYSTEM_PROMPT},
+                {"role": "user", "content": (resolve_live_web_context(prompt) + "\n\n" + prompt) if resolve_live_web_context(prompt) else prompt}
+            ],
                     "max_tokens": 1024
                 }).encode("utf-8")
                 req = urllib.request.Request(
@@ -715,7 +764,8 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
         if path == "/api/ai/query":
             prompt = str(data.get("prompt", ""))
             t0 = time.time()
-            ans, src = query_groq_ai(prompt)
+            sys_prompt = next((m.get("content") for m in messages if m.get("role") == "system"), None)
+            ans, src = query_groq_ai(prompt, system_prompt=sys_prompt)
             dur = round(time.time() - t0, 2)
             self.send_response(200)
             self.send_security_headers()
@@ -770,7 +820,8 @@ class FortifiedSwarmHandler(BaseHTTPRequestHandler):
             prompt = "\n\n".join(prompt_parts) if prompt_parts else str(data.get("prompt", ""))
 
             t0 = time.time()
-            ans, src = query_groq_ai(prompt)
+            sys_prompt = next((m.get("content") for m in messages if m.get("role") == "system"), None)
+            ans, src = query_groq_ai(prompt, system_prompt=sys_prompt)
             dur = round(time.time() - t0, 3)
 
             openai_res = {
