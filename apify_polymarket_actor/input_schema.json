@@ -1,0 +1,36 @@
+{
+  "title": "Polymarket Scanner Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "limit": {
+      "title": "Max Markets to Scan",
+      "type": "integer",
+      "description": "Maximum number of active Polymarket events to retrieve and analyze.",
+      "default": 50,
+      "minimum": 5,
+      "maximum": 500
+    },
+    "minVolumeUsd": {
+      "title": "Minimum Volume ($)",
+      "type": "integer",
+      "description": "Filter out low-volume markets. Only return markets with trading volume above this threshold.",
+      "default": 10000,
+      "minimum": 0
+    },
+    "detectArbitrage": {
+      "title": "Detect Implied Probability Arbitrage",
+      "type": "boolean",
+      "description": "Flag markets where total outcome token pricing deviates from 1.00 by more than 1.5%.",
+      "default": true
+    },
+    "tagFilter": {
+      "title": "Tag / Category Filter",
+      "type": "string",
+      "description": "Optional category filter (e.g. 'Politics', 'Crypto', 'Fed', 'Tech'). Leave blank for all.",
+      "editor": "textfield",
+      "default": ""
+    }
+  },
+  "required": ["limit"]
+}

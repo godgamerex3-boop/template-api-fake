@@ -1,0 +1,42 @@
+{
+  "title": "DexScreener Whale Tracker Input Schema",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "chains": {
+      "title": "Blockchains to Track",
+      "type": "array",
+      "description": "Select the target blockchains (e.g. solana, base, ethereum).",
+      "default": ["solana", "base"],
+      "prefill": ["solana", "base"],
+      "items": {
+        "type": "string",
+        "enum": ["solana", "base", "ethereum", "arbitrum", "bsc"]
+      },
+      "editor": "select"
+    },
+    "minLiquidityUsd": {
+      "title": "Minimum Liquidity ($ USD)",
+      "type": "integer",
+      "description": "Filter tokens with at least this amount of liquidity locked.",
+      "default": 10000,
+      "minimum": 0
+    },
+    "minVolume24h": {
+      "title": "Minimum 24h Volume ($ USD)",
+      "type": "integer",
+      "description": "Filter tokens with at least this 24-hour trading volume.",
+      "default": 50000,
+      "minimum": 0
+    },
+    "maxResults": {
+      "title": "Maximum Token Pairs to Scrape",
+      "type": "integer",
+      "description": "Maximum number of filtered token pairs to return.",
+      "default": 50,
+      "maximum": 500,
+      "minimum": 1
+    }
+  },
+  "required": ["chains", "minLiquidityUsd", "minVolume24h"]
+}
