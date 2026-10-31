@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR ContentForge AI — Zero-Install Cloud SaaS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            900: '#1e1b4b'
+                        },
+                        darkbg: '#080c16',
+                        cardbg: '#0f172a',
+                        cardborder: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Marked.js for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080c16; color: #f8fafc; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glow-brand { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.35); }
+        .markdown-body h1 { font-size: 1.5rem; font-weight: 700; margin-top: 1rem; margin-bottom: 0.5rem; color: #818cf8; }
+        .markdown-body h2 { font-size: 1.25rem; font-weight: 600; margin-top: 1rem; margin-bottom: 0.5rem; color: #38bdf8; }
+        .markdown-body h3 { font-size: 1.1rem; font-weight: 600; margin-top: 0.75rem; margin-bottom: 0.25rem; color: #a78bfa; }
+        .markdown-body p { margin-bottom: 0.75rem; line-height: 1.6; color: #cbd5e1; }
+        .markdown-body ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 0.75rem; color: #cbd5e1; }
+        .markdown-body li { margin-bottom: 0.35rem; }
+        .markdown-body blockquote { border-left: 3px solid #6366f1; padding-left: 1rem; color: #94a3b8; font-style: italic; margin-bottom: 0.75rem; }
+        .markdown-body pre { background: #0b1120; border: 1px solid #1e293b; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; }
+        .markdown-body code { background: #1e293b; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; color: #38bdf8; }
+        .markdown-body hr { border-color: rgba(255, 255, 255, 0.08); margin: 1.5rem 0; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="border-b border-cardborder sticky top-0 z-50 glass-panel">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                    <i class="fa-solid fa-bolt text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-bold text-lg text-white tracking-tight">AR ContentForge</span>
+                        <span class="text-xs bg-brand-500/20 text-brand-400 border border-brand-500/30 px-2 py-0.5 rounded-full font-mono font-medium">SaaS Cloud</span>
+                    </div>
+                    <p class="text-xs text-slate-400">Zero-Install Multi-Tenant AI Platform</p>
+                </div>
+            </div>
+
+            <!-- Right Controls: Credits & Actions -->
+            <div class="flex items-center space-x-3">
+                <!-- Live Credits Badge -->
+                <div id="credit-badge" class="flex items-center space-x-2 bg-slate-900 border border-brand-500/30 px-3.5 py-1.5 rounded-full cursor-pointer hover:border-brand-400 transition" onclick="openTopupModal()">
+                    <i class="fa-solid fa-coins text-amber-400 text-sm animate-pulse"></i>
+                    <span class="text-xs text-slate-400 font-medium">Credits:</span>
+                    <span id="credit-count" class="text-sm font-bold text-white font-mono">--</span>
+                    <i class="fa-solid fa-plus text-xs text-brand-400 ml-1"></i>
+                </div>
+
+                <!-- API Key Button -->
+                <button onclick="openApiKeyModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition">
+                    <i class="fa-solid fa-key text-slate-400"></i>
+                    <span>API Key</span>
+                </button>
+
+                <!-- History Button -->
+                <button onclick="openHistoryModal()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center space-x-1.5 transition">
+                    <i class="fa-solid fa-clock-rotate-left text-slate-400"></i>
+                    <span>History</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+
+        <!-- Value Proposition Hero Banner -->
+        <div class="rounded-2xl bg-gradient-to-r from-brand-900/40 via-purple-900/20 to-slate-900 border border-brand-500/20 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div>
+                <h1 class="text-xl md:text-2xl font-extrabold text-white tracking-tight">Turn Any Web Link, Idea, or Code into High-Value Assets</h1>
+                <p class="text-sm text-slate-400 mt-1">100% Hosted in the Cloud. Zero local software installation, zero driver configuration, zero hardware strain.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center space-x-2 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-3 py-1.5 rounded-lg">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span>Cloud Cluster Online</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 Specialized Tool Tabs -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button onclick="switchTab('url_analyzer')" id="tab-url_analyzer" class="tool-tab active p-4 rounded-xl glass-panel text-left border transition relative overflow-hidden group">
+                <div class="text-brand-400 text-xl mb-2 group-hover:scale-110 transition duration-200"><i class="fa-solid fa-globe"></i></div>
+                <div class="font-bold text-sm text-white">URL & Web Analyzer</div>
+                <div class="text-xs text-slate-400 mt-1">Extract insights, takeaways, and metrics from any live webpage</div>
+            </button>
+
+            <button onclick="switchTab('viral_copy')" id="tab-viral_copy" class="tool-tab p-4 rounded-xl glass-panel text-left border border-cardborder text-slate-400 hover:text-white transition relative overflow-hidden group">
+                <div class="text-purple-400 text-xl mb-2 group-hover:scale-110 transition duration-200"><i class="fa-brands fa-x-twitter"></i></div>
+                <div class="font-bold text-sm text-white">Viral Social Copy</div>
+                <div class="text-xs text-slate-400 mt-1">Generate high-conversion X threads & LinkedIn authority posts</div>
+            </button>
+
+            <button onclick="switchTab('video_script')" id="tab-video_script" class="tool-tab p-4 rounded-xl glass-panel text-left border border-cardborder text-slate-400 hover:text-white transition relative overflow-hidden group">
+                <div class="text-pink-400 text-xl mb-2 group-hover:scale-110 transition duration-200"><i class="fa-solid fa-video"></i></div>
+                <div class="font-bold text-sm text-white">Video Script Architect</div>
+                <div class="text-xs text-slate-400 mt-1">60s YouTube Shorts / TikTok hook, retention loop, and cues</div>
+            </button>
+
+            <button onclick="switchTab('code_explainer')" id="tab-code_explainer" class="tool-tab p-4 rounded-xl glass-panel text-left border border-cardborder text-slate-400 hover:text-white transition relative overflow-hidden group">
+                <div class="text-emerald-400 text-xl mb-2 group-hover:scale-110 transition duration-200"><i class="fa-solid fa-code"></i></div>
+                <div class="font-bold text-sm text-white">Code & Arch Explainer</div>
+                <div class="text-xs text-slate-400 mt-1">Deconstruct architecture, Mermaid charts, and Big-O analysis</div>
+            </button>
+        </div>
+
+        <!-- Two Column Workspace: Input on Left, Output on Right -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+            
+            <!-- Input Workspace (Left Column) -->
+            <div class="lg:col-span-5 flex flex-col gap-4">
+                <div class="glass-panel rounded-2xl p-6 border border-cardborder flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <label id="input-label" class="text-xs font-semibold uppercase tracking-wider text-slate-300">Target Web URL or Content</label>
+                            <span class="text-xs text-slate-500 font-mono">Cost: 5 Credits</span>
+                        </div>
+
+                        <!-- Quick Example Chips -->
+                        <div id="example-chips" class="flex flex-wrap gap-1.5 mb-3">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+
+                        <!-- Main Input Textarea -->
+                        <textarea id="main-input" rows="8" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 font-mono transition placeholder:text-slate-600" placeholder="Paste target URL or raw text here..."></textarea>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-800 mt-4 flex items-center justify-between gap-3">
+                        <button onclick="clearInput()" class="text-xs text-slate-400 hover:text-slate-200 px-3 py-2 rounded-lg hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Clear
+                        </button>
+                        <button id="generate-btn" onclick="triggerGeneration()" class="flex-1 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm px-5 py-3 rounded-xl shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition duration-200 active:scale-95">
+                            <i id="btn-icon" class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span id="btn-text">Generate Asset (5 Credits)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live SaaS Architecture Infobox -->
+                <div class="p-4 rounded-xl border border-cardborder bg-slate-900/40 text-xs text-slate-400 space-y-1.5">
+                    <div class="flex items-center justify-between text-slate-300 font-medium">
+                        <span><i class="fa-solid fa-cloud text-brand-400 mr-1.5"></i> SaaS Execution Mode</span>
+                        <span class="font-mono text-emerald-400">Multi-Tenant REST API</span>
+                    </div>
+                    <p>All extraction, web scraping, and AI inference execute on the server. Your workstation device runs at 0% compute overhead.</p>
+                </div>
+            </div>
+
+            <!-- Output Workspace (Right Column) -->
+            <div class="lg:col-span-7 flex flex-col">
+                <div class="glass-panel rounded-2xl p-6 border border-cardborder flex-1 flex flex-col">
+                    <!-- Output Toolbar -->
+                    <div class="flex items-center justify-between pb-4 border-b border-cardborder mb-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-brand-400"></span>
+                            <h2 class="text-sm font-bold text-white uppercase tracking-wider">Generated Asset</h2>
+                        </div>
+                        <div id="output-actions" class="hidden flex items-center space-x-2">
+                            <span id="latency-metric" class="text-xs text-slate-400 font-mono mr-2">-- ms</span>
+                            <button onclick="copyOutput()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center space-x-1 transition">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                            <button onclick="downloadMarkdown()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center space-x-1 transition">
+                                <i class="fa-solid fa-download"></i>
+                                <span>Export .md</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Output Content Area -->
+                    <div id="output-wrapper" class="flex-1 overflow-y-auto max-h-[560px] pr-2">
+                        <!-- Initial Placeholder State -->
+                        <div id="empty-state" class="h-full flex flex-col items-center justify-center text-center py-16 text-slate-500">
+                            <div class="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 mb-4 text-2xl">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <h3 class="text-base font-semibold text-slate-300">Ready to Generate</h3>
+                            <p class="text-xs text-slate-500 max-w-sm mt-1">Select a tool on the left, paste a URL or topic, and watch the cloud cluster transform it into high-impact content.</p>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="loading-state" class="hidden h-full flex flex-col items-center justify-center text-center py-16">
+                            <div class="w-12 h-12 border-4 border-brand-500/20 border-t-brand-500 rounded-full animate-spin mb-4"></div>
+                            <h3 class="text-sm font-semibold text-slate-200">Processing Cloud Request...</h3>
+                            <p class="text-xs text-slate-400 mt-1">Fetching live web context & synthesizing asset in &lt;800ms</p>
+                        </div>
+
+                        <!-- Rendered Output -->
+                        <div id="output-content" class="hidden markdown-body text-sm leading-relaxed"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Top-Up Modal (SaaS Monetization Engine) -->
+    <div id="topup-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardbg border border-slate-700 max-w-md w-full rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeTopupModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-xl mx-auto mb-3">
+                    <i class="fa-solid fa-coins"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Top Up Generation Credits</h3>
+                <p class="text-xs text-slate-400 mt-1">Software as a Service Metered Pricing Model</p>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <div class="border border-brand-500/40 bg-brand-950/20 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:border-brand-400 transition" onclick="submitTopup(5.0, 100, 'Stripe Card')">
+                    <div>
+                        <div class="font-bold text-sm text-white">Starter Creator Pack</div>
+                        <div class="text-xs text-slate-400">100 Credits (20 Generations)</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-base text-brand-400">$5.00</div>
+                        <span class="text-[10px] text-emerald-400 font-mono">Instant Top-up</span>
+                    </div>
+                </div>
+
+                <div class="border border-slate-700 bg-slate-900/60 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:border-purple-400 transition" onclick="submitTopup(15.0, 500, 'Stripe Card')">
+                    <div>
+                        <div class="font-bold text-sm text-white">Pro Agency Pack <span class="text-[10px] bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded font-mono ml-1">Popular</span></div>
+                        <div class="text-xs text-slate-400">500 Credits (100 Generations)</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-base text-purple-400">$15.00</div>
+                        <span class="text-[10px] text-purple-400 font-mono">Save 40%</span>
+                    </div>
+                </div>
+
+                <div class="border border-slate-700 bg-slate-900/60 p-4 rounded-xl flex items-center justify-between cursor-pointer hover:border-blue-400 transition" onclick="submitTopup(20.0, 750, 'Base USDC')">
+                    <div>
+                        <div class="font-bold text-sm text-white">Web3 Base Layer-2 Pack</div>
+                        <div class="text-xs text-slate-400">750 Credits (150 Generations)</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-base text-blue-400">20 USDC</div>
+                        <span class="text-[10px] text-blue-400 font-mono">Zero Gas Fees</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-[11px] text-center text-slate-500">Click any tier above to simulate instant payment settlement via SQLite credit ledger.</p>
+        </div>
+    </div>
+
+    <!-- API Key Modal (B2B SaaS Developer Access) -->
+    <div id="apikey-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardbg border border-slate-700 max-w-lg w-full rounded-2xl p-6 shadow-2xl relative">
+            <button onclick="closeApiKeyModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Developer API Key</h3>
+                    <p class="text-xs text-slate-400">Integrate AR ContentForge into external applications</p>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="text-xs text-slate-400 mb-1 block">Your Secret Bearer Key:</label>
+                <div class="flex items-center space-x-2">
+                    <input id="api-key-input" readonly class="flex-1 bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-300 font-mono" value="Loading...">
+                    <button onclick="copyApiKey()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2.5 rounded-lg border border-slate-700 text-xs transition">Copy</button>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-xs text-slate-400 mb-1 block">cURL Example Request:</label>
+                <pre class="bg-slate-950 p-3 rounded-lg text-[11px] font-mono text-slate-300 overflow-x-auto border border-slate-800">curl -X POST https://your-domain.com/api/generate \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: <span id="curl-key" class="text-brand-400">sk_ar_...</span>" \
+  -d '{"mode": "viral_copy", "input_text": "SaaS zero install"}'</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Drawer / Modal -->
+    <div id="history-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardbg border border-slate-700 max-w-2xl w-full rounded-2xl p-6 shadow-2xl relative max-h-[80vh] flex flex-col">
+            <button onclick="closeHistoryModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">Generation History</h3>
+                    <p class="text-xs text-slate-400">Previous assets saved in multi-tenant database</p>
+                </div>
+            </div>
+
+            <div id="history-list" class="flex-1 overflow-y-auto space-y-2 pr-2">
+                <div class="text-center py-8 text-xs text-slate-500">Loading history...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 border border-brand-500/50 text-white px-4 py-3 rounded-xl shadow-2xl text-xs flex items-center space-x-2.5 transition transform translate-y-20 opacity-0 pointer-events-none z-50">
+        <i id="toast-icon" class="fa-solid fa-check text-emerald-400 text-sm"></i>
+        <span id="toast-message">Action Successful</span>
+    </div>
+
+    <!-- Client-Side JavaScript Logic -->
+    <script>
+        // State
+        let currentMode = 'url_analyzer';
+        let currentUser = null;
+        let lastOutputRaw = '';
+
+        const toolConfigs = {
+            url_analyzer: {
+                label: 'Target Web URL or Article',
+                placeholder: 'Enter any URL (e.g. https://news.ycombinator.com or your blog URL)...',
+                examples: [
+                    'https://github.com/trending',
+                    'https://antigravity-swarm-mesh.onrender.com',
+                    'https://news.ycombinator.com'
+                ]
+            },
+            viral_copy: {
+                label: 'Core Topic, Idea, or Product Pitch',
+                placeholder: 'Describe your idea, product, or thesis you want to turn viral on X and LinkedIn...',
+                examples: [
+                    'Why zero-install SaaS wins over desktop software in 2026',
+                    'How we built a 1,000 node distributed swarm with zero hardware cost',
+                    '3 psychological hacks to stop procastinating on coding projects'
+                ]
+            },
+            video_script: {
+                label: 'Video Topic or Niche Angle',
+                placeholder: 'What is the topic of your 60-second short? (e.g. "How AI saves 10 hours a week")...',
+                examples: [
+                    'The truth about building a micro-SaaS with zero coding experience',
+                    'How high-frequency gamers tune their PC for zero input latency',
+                    'Stop installing heavy software when browser SaaS does it in 1 second'
+                ]
+            },
+            code_explainer: {
+                label: 'Code Block or System Architecture',
+                placeholder: 'Paste your Python, JavaScript, Rust, or SQL code here to deconstruct...',
+                examples: [
+                    'def fibonacci(n):\n    if n <= 1: return n\n    return fibonacci(n-1) + fibonacci(n-2)',
+                    'CREATE TABLE tenants (id UUID PRIMARY KEY, name TEXT, credits INT DEFAULT 50);',
+                    'async function fetchClusterStatus() { const res = await fetch("/api/cluster"); return res.json(); }'
+                ]
+            }
+        };
+
+        // Initialize User
+        async function initUser() {
+            let uid = localStorage.getItem('ar_saas_uid');
+            try {
+                const url = uid ? `/api/user/profile?user_id=${uid}` : '/api/user/profile';
+                const res = await fetch(url);
+                const data = await res.json();
+                currentUser = data;
+                localStorage.setItem('ar_saas_uid', data.user_id);
+                document.getElementById('credit-count').textContent = data.credits;
+                document.getElementById('api-key-input').value = data.api_key;
+                document.getElementById('curl-key').textContent = data.api_key;
+            } catch (e) {
+                console.error("Error initializing user:", e);
+                document.getElementById('credit-count').textContent = '50';
+            }
+        }
+
+        // Switch Tool Tab
+        function switchTab(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tool-tab').forEach(el => {
+                el.classList.remove('active', 'border-brand-500', 'bg-brand-950/20', 'text-white');
+                el.classList.add('border-cardborder', 'text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`tab-${mode}`);
+            activeBtn.classList.remove('border-cardborder', 'text-slate-400');
+            activeBtn.classList.add('active', 'border-brand-500', 'bg-brand-950/20', 'text-white');
+
+            const conf = toolConfigs[mode];
+            document.getElementById('input-label').textContent = conf.label;
+            document.getElementById('main-input').placeholder = conf.placeholder;
+
+            // Render example chips
+            const chipsContainer = document.getElementById('example-chips');
+            chipsContainer.innerHTML = '';
+            conf.examples.forEach(ex => {
+                const chip = document.createElement('button');
+                chip.className = 'text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2 py-0.5 rounded-md transition';
+                chip.textContent = ex.length > 35 ? ex.substring(0, 35) + '...' : ex;
+                chip.onclick = () => {
+                    document.getElementById('main-input').value = ex;
+                };
+                chipsContainer.appendChild(chip);
+            });
+        }
+
+        // Trigger Generation
+        async function triggerGeneration() {
+            const inputVal = document.getElementById('main-input').value.trim();
+            if (!inputVal) {
+                showToast("Please enter a URL or content to generate.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('generate-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+            
+            btn.disabled = true;
+            btnText.textContent = "Synthesizing...";
+            btnIcon.className = "fa-solid fa-spinner animate-spin";
+
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('output-content').classList.add('hidden');
+            document.getElementById('output-actions').classList.add('hidden');
+            document.getElementById('loading-state').classList.remove('hidden');
+
+            try {
+                const res = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mode: currentMode,
+                        input_text: inputVal,
+                        user_id: currentUser ? currentUser.user_id : null
+                    })
+                });
+
+                if (res.status === 402) {
+                    const errData = await res.json();
+                    showToast("Insufficient credits! Please top up.", "error");
+                    openTopupModal();
+                    return;
+                }
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.detail || "Generation failed.");
+                }
+
+                const data = await res.json();
+                lastOutputRaw = data.output;
+
+                // Update credits
+                document.getElementById('credit-count').textContent = data.remaining_credits;
+                if (currentUser) currentUser.credits = data.remaining_credits;
+
+                // Render Markdown
+                document.getElementById('output-content').innerHTML = marked.parse(data.output);
+                document.getElementById('latency-metric').textContent = `${data.latency_ms} ms`;
+
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('output-content').classList.remove('hidden');
+                document.getElementById('output-actions').classList.remove('hidden');
+
+                showToast(`Success! -${data.credits_deducted} credits deducted.`, "success");
+            } catch (err) {
+                console.error(err);
+                showToast(err.message || "Network error.", "error");
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = "Generate Asset (5 Credits)";
+                btnIcon.className = "fa-solid fa-wand-magic-sparkles";
+            }
+        }
+
+        // Top-up Simulation
+        async function submitTopup(usd, credits, method) {
+            if (!currentUser) return;
+            try {
+                const res = await fetch('/api/user/topup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: currentUser.user_id,
+                        amount_usd: usd,
+                        credits: credits,
+                        method: method
+                    })
+                });
+                const data = await res.json();
+                currentUser.credits = data.new_balance;
+                document.getElementById('credit-count').textContent = data.new_balance;
+                closeTopupModal();
+                showToast(`+${credits} Credits added via ${method}!`, "success");
+            } catch (e) {
+                showToast("Top-up failed.", "error");
+            }
+        }
+
+        // History Modal
+        async function openHistoryModal() {
+            if (!currentUser) return;
+            document.getElementById('history-modal').classList.remove('hidden');
+            const list = document.getElementById('history-list');
+            list.innerHTML = '<div class="text-center py-6 text-xs text-slate-500">Fetching history...</div>';
+            try {
+                const res = await fetch(`/api/history?user_id=${currentUser.user_id}`);
+                const data = await res.json();
+                if (!data.history || data.history.length === 0) {
+                    list.innerHTML = '<div class="text-center py-8 text-xs text-slate-500">No previous generations found.</div>';
+                    return;
+                }
+                list.innerHTML = '';
+                data.history.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = 'border border-slate-800 bg-slate-900/70 p-3 rounded-xl flex items-center justify-between text-xs hover:border-slate-700 transition cursor-pointer';
+                    row.innerHTML = `
+                        <div class="overflow-hidden pr-3">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <span class="bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded font-mono text-[10px] uppercase">${item.mode}</span>
+                                <span class="text-slate-500 text-[10px]">${item.created_at}</span>
+                            </div>
+                            <div class="text-slate-300 truncate font-mono">${item.input_preview}</div>
+                        </div>
+                        <button class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded text-xs">Load</button>
+                    `;
+                    row.onclick = () => {
+                        lastOutputRaw = item.output_text;
+                        document.getElementById('output-content').innerHTML = marked.parse(item.output_text);
+                        document.getElementById('empty-state').classList.add('hidden');
+                        document.getElementById('output-content').classList.remove('hidden');
+                        document.getElementById('output-actions').classList.remove('hidden');
+                        closeHistoryModal();
+                        showToast("Loaded saved generation.", "success");
+                    };
+                    list.appendChild(row);
+                });
+            } catch (e) {
+                list.innerHTML = '<div class="text-center py-6 text-xs text-rose-400">Error loading history.</div>';
+            }
+        }
+
+        function closeHistoryModal() { document.getElementById('history-modal').classList.add('hidden'); }
+        function openTopupModal() { document.getElementById('topup-modal').classList.remove('hidden'); }
+        function closeTopupModal() { document.getElementById('topup-modal').classList.add('hidden'); }
+        function openApiKeyModal() { document.getElementById('apikey-modal').classList.remove('hidden'); }
+        function closeApiKeyModal() { document.getElementById('apikey-modal').classList.add('hidden'); }
+        function clearInput() { document.getElementById('main-input').value = ''; }
+
+        function copyOutput() {
+            if (!lastOutputRaw) return;
+            navigator.clipboard.writeText(lastOutputRaw);
+            showToast("Copied to clipboard!", "success");
+        }
+
+        function copyApiKey() {
+            const key = document.getElementById('api-key-input').value;
+            navigator.clipboard.writeText(key);
+            showToast("API Key copied!", "success");
+        }
+
+        function downloadMarkdown() {
+            if (!lastOutputRaw) return;
+            const blob = new Blob([lastOutputRaw], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ar-contentforge-${currentMode}-${Date.now()}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Downloaded Markdown file!", "success");
+        }
+
+        function showToast(msg, type = "success") {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const message = document.getElementById('toast-message');
+
+            message.textContent = msg;
+            if (type === "error") {
+                icon.className = "fa-solid fa-circle-exclamation text-rose-400 text-sm";
+                toast.classList.replace('border-brand-500/50', 'border-rose-500/50');
+            } else {
+                icon.className = "fa-solid fa-circle-check text-emerald-400 text-sm";
+                toast.classList.replace('border-rose-500/50', 'border-brand-500/50');
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Initialize on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            initUser();
+            switchTab('url_analyzer');
+        });
+    </script>
+</body>
+</html>
