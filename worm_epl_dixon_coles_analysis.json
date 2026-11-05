@@ -1,0 +1,121 @@
+[
+  {
+    "fixture": "Everton vs Coventry City",
+    "date": "Nov 7",
+    "volume": "$693.1K",
+    "dixon_coles": {
+      "home": 0.5634,
+      "draw": 0.2551,
+      "away": 0.1815
+    },
+    "worm_odds": {
+      "home": 0.57,
+      "draw": 0.23,
+      "away": 0.2
+    },
+    "best_pick": "Home (Everton)",
+    "ev": -1.15
+  },
+  {
+    "fixture": "Leeds United vs Tottenham Hotspur",
+    "date": "Nov 7",
+    "volume": "$511.2K",
+    "dixon_coles": {
+      "home": 0.3348,
+      "draw": 0.2836,
+      "away": 0.3816
+    },
+    "worm_odds": {
+      "home": 0.37,
+      "draw": 0.27,
+      "away": 0.36
+    },
+    "best_pick": "Away (Tottenham Hotspur)",
+    "ev": 6.01
+  },
+  {
+    "fixture": "Arsenal vs Hull City",
+    "date": "Nov 7",
+    "volume": "$434.6K",
+    "dixon_coles": {
+      "home": 0.842,
+      "draw": 0.1228,
+      "away": 0.0352
+    },
+    "worm_odds": {
+      "home": 0.85,
+      "draw": 0.1,
+      "away": 0.05
+    },
+    "best_pick": "Home (Arsenal)",
+    "ev": -0.94
+  },
+  {
+    "fixture": "Fulham vs Newcastle United",
+    "date": "Nov 7",
+    "volume": "$554.7K",
+    "dixon_coles": {
+      "home": 0.431,
+      "draw": 0.2766,
+      "away": 0.2924
+    },
+    "worm_odds": {
+      "home": 0.47,
+      "draw": 0.25,
+      "away": 0.28
+    },
+    "best_pick": "Away (Newcastle United)",
+    "ev": 4.43
+  },
+  {
+    "fixture": "Nottingham Forest vs Manchester City",
+    "date": "Nov 8",
+    "volume": "$408.4K",
+    "dixon_coles": {
+      "home": 0.1485,
+      "draw": 0.2281,
+      "away": 0.6235
+    },
+    "worm_odds": {
+      "home": 0.2,
+      "draw": 0.23,
+      "away": 0.57
+    },
+    "best_pick": "Away (Manchester City)",
+    "ev": 9.38
+  },
+  {
+    "fixture": "Crystal Palace vs Liverpool",
+    "date": "Nov 8",
+    "volume": "$272.3K",
+    "dixon_coles": {
+      "home": 0.1425,
+      "draw": 0.2097,
+      "away": 0.6478
+    },
+    "worm_odds": {
+      "home": 0.18,
+      "draw": 0.2,
+      "away": 0.62
+    },
+    "best_pick": "Away (Liverpool)",
+    "ev": 4.48
+  },
+  {
+    "fixture": "Manchester United vs Aston Villa",
+    "date": "Nov 8",
+    "volume": "$262.2K",
+    "dixon_coles": {
+      "home": 0.4227,
+      "draw": 0.2667,
+      "away": 0.3105
+    },
+    "worm_odds": {
+      "home": 0.45,
+      "draw": 0.25,
+      "away": 0.3
+    },
+    "best_pick": "Away (Aston Villa)",
+    "ev": 3.51
+  }
+]

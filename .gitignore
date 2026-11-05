@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*.class
+*.pyc
+.pytest_cache/
+.env
+*.bak
+node_modules/

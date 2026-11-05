@@ -1,0 +1,20 @@
+{
+  "actorSpecification": 1,
+  "name": "dexscreener-whale-tracker",
+  "title": "DexScreener Smart-Money Whale Tracker & Liquidity Screener",
+  "description": "Real-time DEX token screener tracking smart-money whale volume, liquidity depth, price velocity, and breakout tokens across Solana, Base, and Ethereum.",
+  "version": "1.0.0",
+  "buildTag": "latest",
+  "meta": {
+    "templateId": "project_empty"
+  },
+  "pricing": {
+    "pricingModel": "PAY_PER_EVENT",
+    "pricingPerEvent": {
+      "TOKEN_PAIR_PARSED": 0.0001
+    }
+  },
+  "environmentVariables": {
+    "NODE_ENV": "production"
+  }
+}

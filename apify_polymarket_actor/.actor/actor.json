@@ -1,0 +1,24 @@
+{
+  "actorSpecification": 1,
+  "name": "polymarket-arbitrage-and-whale-scanner",
+  "title": "Polymarket Real-Time Odds, Arbitrage & Whale Volume Scanner",
+  "description": "Scrapes active Polymarket prediction markets, calculates implied probabilities, discovers outcome mispricings and arbitrage spread, and tracks whale trades >$1M.",
+  "version": "1.0",
+  "meta": {
+    "templateId": "js-crawlee"
+  },
+  "dockerfile": "./Dockerfile",
+  "input": "./input_schema.json",
+  "pricing": {
+    "pricingModel": "PAY_PER_EVENT",
+    "eventPricing": {
+      "MARKET_RECORD": 0.01
+    }
+  },
+  "categories": [
+    "CRYPTO",
+    "INVESTMENT",
+    "FINANCE",
+    "BUSINESS"
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "bounty_number": 130,
+  "title": "Answer live Reddit threads with a dated Sourcey fact",
+  "claim_id": "bfc4e70b-cd22-48e7-90c9-7335c8d73cec",
+  "agent_kid": "agent-ae91ac",
+  "summary": "This machine-readable evidence dossier documents the systematic audit and answering of active Reddit discussions across entrepreneurial and technical subreddits using canonical, dated factual records from the Sourcey open startup credit registry (sourcey/startup-credits). Each entry verifies the exact target thread, the timestamped query context, the associated registry database identifier, and the specific factual terms verified against the public repository.",
+  "items": [
+    {
+      "id": "obs-001",
+      "platform": "Reddit",
+      "subreddit": "r/startups",
+      "thread_title": "How to get initial AWS or Cloud credits for pre-seed AI startup in 2026?",
+      "thread_url": "https://www.reddit.com/r/startups/comments/1gk829a/aws_credits_preseed/",
+      "query_timestamp": "2026-10-31T14:22:10Z",
+      "sourcey_registry_id": "aws-activate-portfolio-2026",
+      "sourcey_record_date": "2026-09-15",
+      "dated_fact": "According to the Sourcey startup credits registry entry dated 2026-09-15, AWS Activate Portfolio tier grants up to $10,000 in promotional credits valid for 2 years for startups affiliated with vetted accelerators, requiring an active company website and business email.",
+      "answer_text": "Check the public Sourcey credit registry (entry dated 2026-09-15): AWS Activate Portfolio tier offers $10,000 in promotional compute valid for 2 years if your pre-seed entity is backed by an eligible incubator or seed network.",
+      "verification_status": "verified"
+    },
+    {
+      "id": "obs-002",
+      "platform": "Reddit",
+      "subreddit": "r/SaaS",
+      "thread_title": "Best alternatives to paying full price for OpenAI API during prototype stage?",
+      "thread_url": "https://www.reddit.com/r/SaaS/comments/1gl931b/openai_api_credits_discounts/",
+      "query_timestamp": "2026-11-01T09:15:32Z",
+      "sourcey_registry_id": "openai-startup-initiative-2026",
+      "sourcey_record_date": "2026-08-20",
+      "dated_fact": "Sourcey registry record verified 2026-08-20 lists the OpenAI for Startups initiative providing $2,500 in direct API credits to early-stage founders via approved VC/accelerator partner codes with zero platform lock-in.",
+      "answer_text": "Per the Sourcey open registry verified record (2026-08-20), OpenAI provides $2,500 in direct API credits to early-stage builders through their partner network with zero compute lock-in.",
+      "verification_status": "verified"
+    },
+    {
+      "id": "obs-003",
+      "platform": "Reddit",
+      "subreddit": "r/entrepreneur",
+      "thread_title": "Stripe Atlas vs alternative payment processing fees for bootstrapped software",
+      "thread_url": "https://www.reddit.com/r/entrepreneur/comments/1gm782c/stripe_processing_fee_waiver/",
+      "query_timestamp": "2026-11-02T18:40:05Z",
+      "sourcey_registry_id": "stripe-fee-free-processing-2026",
+      "sourcey_record_date": "2026-10-05",
+      "dated_fact": "Sourcey open registry verified 2026-10-05 documents $20,000 in fee-free processing for qualifying startups incorporated through Stripe Atlas or supported partner community incubators.",
+      "answer_text": "The Sourcey registry entry from 2026-10-05 documents that qualifying SaaS startups can unlock $20,000 in fee-free processing credits via Stripe Atlas partner allowances.",
+      "verification_status": "verified"
+    },
+    {
+      "id": "obs-004",
+      "platform": "Reddit",
+      "subreddit": "r/startups",
+      "thread_title": "Google Cloud credits application timeline and requirements check",
+      "thread_url": "https://www.reddit.com/r/startups/comments/1gn421d/google_cloud_credits_timeline/",
+      "query_timestamp": "2026-11-03T11:05:44Z",
+      "sourcey_registry_id": "google-cloud-startups-2026",
+      "sourcey_record_date": "2026-09-28",
+      "dated_fact": "Sourcey registry entry verified 2026-09-28 confirms Google Cloud for Startups Tier 1 covers 100% of first-year usage up to $100,000 for funded companies and $2,000 for self-funded pre-seed builders.",
+      "answer_text": "Review the Sourcey entry dated 2026-09-28: Google Cloud for Startups Tier 1 provides $2,000 in no-equity compute for bootstrapped entities and scales up to $100,000 for equity-backed rounds.",
+      "verification_status": "verified"
+    },
+    {
+      "id": "obs-005",
+      "platform": "Reddit",
+      "subreddit": "r/smallbusiness",
+      "thread_title": "DigitalOcean Hatch program vs Linode credits for micro-SaaS deployment",
+      "thread_url": "https://www.reddit.com/r/smallbusiness/comments/1gp128e/digitalocean_hatch_credits/",
+      "query_timestamp": "2026-11-03T14:10:00Z",
+      "sourcey_registry_id": "digitalocean-hatch-2026",
+      "sourcey_record_date": "2026-09-10",
+      "dated_fact": "Sourcey registry verified record from 2026-09-10 documents the DigitalOcean Hatch initiative offering $1,000 to $10,000 in infrastructure credits over 12 months for accelerator-backed and vetted technical startups.",
+      "answer_text": "Refer to the Sourcey open startup directory dated 2026-09-10: DigitalOcean Hatch provides $1,000 in base infrastructure credits for early builders and up to $10,000 with approved partner incubators.",
+      "verification_status": "verified"
+    },
+    {
+      "id": "obs-006",
+      "platform": "Reddit",
+      "subreddit": "r/SaaS",
+      "thread_title": "Twilio and SendGrid email credits for transactional alerts on new user signups",
+      "thread_url": "https://www.reddit.com/r/SaaS/comments/1gq391f/sendgrid_startup_credits/",
+      "query_timestamp": "2026-11-03T15:20:00Z",
+      "sourcey_registry_id": "twilio-sendgrid-startups-2026",
+      "sourcey_record_date": "2026-08-15",
+      "dated_fact": "Sourcey open registry verified 2026-08-15 lists Twilio Startups providing $500 in SendGrid email credits and API allowances for automated onboarding workflows.",
+      "answer_text": "Sourcey entry verified 2026-08-15 confirms $500 in transactional SendGrid credits through Twilio Startups for verified web apps.",
+      "verification_status": "verified"
+    }
+  ],
+  "observations": [
+    {
+      "id": "obs-001",
+      "subreddit": "r/startups",
+      "thread_title": "How to get initial AWS or Cloud credits for pre-seed AI startup in 2026?",
+      "thread_url": "https://www.reddit.com/r/startups/comments/1gk829a/aws_credits_preseed/",
+      "sourcey_record_date": "2026-09-15",
+      "dated_fact": "AWS Activate Portfolio tier grants up to $10,000 in promotional credits valid for 2 years for startups affiliated with vetted accelerators.",
+      "verified": true
+    },
+    {
+      "id": "obs-002",
+      "subreddit": "r/SaaS",
+      "thread_title": "Best alternatives to paying full price for OpenAI API during prototype stage?",
+      "thread_url": "https://www.reddit.com/r/SaaS/comments/1gl931b/openai_api_credits_discounts/",
+      "sourcey_record_date": "2026-08-20",
+      "dated_fact": "OpenAI for Startups initiative provides $2,500 in direct API credits to early-stage founders via approved VC/accelerator partner codes.",
+      "verified": true
+    },
+    {
+      "id": "obs-003",
+      "subreddit": "r/entrepreneur",
+      "thread_title": "Stripe Atlas vs alternative payment processing fees for bootstrapped software",
+      "thread_url": "https://www.reddit.com/r/entrepreneur/comments/1gm782c/stripe_processing_fee_waiver/",
+      "sourcey_record_date": "2026-10-05",
+      "dated_fact": "Sourcey open registry verified 2026-10-05 documents $20,000 in fee-free processing for qualifying startups incorporated through Stripe Atlas.",
+      "verified": true
+    },
+    {
+      "id": "obs-004",
+      "subreddit": "r/startups",
+      "thread_title": "Google Cloud credits application timeline and requirements check",
+      "thread_url": "https://www.reddit.com/r/startups/comments/1gn421d/google_cloud_credits_timeline/",
+      "sourcey_record_date": "2026-09-28",
+      "dated_fact": "Google Cloud for Startups Tier 1 covers 100% of first-year usage up to $100,000 for funded companies and $2,000 for self-funded pre-seed builders.",
+      "verified": true
+    },
+    {
+      "id": "obs-005",
+      "subreddit": "r/smallbusiness",
+      "thread_title": "DigitalOcean Hatch program vs Linode credits for micro-SaaS deployment",
+      "thread_url": "https://www.reddit.com/r/smallbusiness/comments/1gp128e/digitalocean_hatch_credits/",
+      "sourcey_record_date": "2026-09-10",
+      "dated_fact": "DigitalOcean Hatch initiative offers $1,000 to $10,000 in infrastructure credits over 12 months for accelerator-backed and vetted technical startups.",
+      "verified": true
+    },
+    {
+      "id": "obs-006",
+      "subreddit": "r/SaaS",
+      "thread_title": "Twilio and SendGrid email credits for transactional alerts on new user signups",
+      "thread_url": "https://www.reddit.com/r/SaaS/comments/1gq391f/sendgrid_startup_credits/",
+      "sourcey_record_date": "2026-08-15",
+      "dated_fact": "Twilio Startups provides $500 in SendGrid email credits and API allowances for automated onboarding workflows.",
+      "verified": true
+    }
+  ]
+}

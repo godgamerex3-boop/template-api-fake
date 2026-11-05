@@ -1,0 +1,25 @@
+{
+  "name": "polymarket-arbitrage-and-whale-scanner",
+  "version": "1.0.0",
+  "description": "High-speed Polymarket prediction market scanner, implied probability calculator, and whale volume detector with Pay-Per-Event pricing.",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "node test_standalone.js",
+    "start": "node main.js"
+  },
+  "dependencies": {
+    "apify": "^3.2.0"
+  },
+  "keywords": [
+    "polymarket",
+    "prediction-markets",
+    "arbitrage",
+    "whale-tracker",
+    "crypto",
+    "betting",
+    "apify-actor"
+  ],
+  "author": "Antigravity",
+  "license": "Apache-2.0"
+}
